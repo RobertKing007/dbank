@@ -6,7 +6,10 @@ import dbank from '../dbank.png';
 import Web3 from 'web3';
 import './App.css';
 
+//h0m3w0rk - add new tab to check accrued interest
+
 class App extends Component {
+
 
   async componentWillMount() {
     await this.loadBlockchainData(this.props.dispatch)
@@ -52,6 +55,7 @@ class App extends Component {
     }
   }
 
+
   async withdraw(e) {
     e.preventDefault()
     if(this.state.dbank!=='undefined'){
@@ -63,29 +67,6 @@ class App extends Component {
     }
   }
 
-  async borrow(amount) {
-    if(this.state.dbank!=='undefined'){
-      try{
-        await this.state.dbank.methods.borrow().send({value: amount.toString(), from: this.state.account})
-      } catch (e) {
-        console.log('Error, borrow: ', e)
-      }
-    }
-  }
-
-  async payOff(e) {
-    e.preventDefault()
-    if(this.state.dbank!=='undefined'){
-      try{
-        const collateralEther = await this.state.dbank.methods.collateralEther(this.state.account).call({from: this.state.account})
-        const tokenBorrowed = collateralEther/2
-        await this.state.token.methods.approve(this.state.dBankAddress, tokenBorrowed.toString()).send({from: this.state.account})
-        await this.state.dbank.methods.payOff().send({from: this.state.account})
-      } catch(e) {
-        console.log('Error, pay off: ', e)
-      }
-    }
-  }
 
   constructor(props) {
     super(props)
@@ -110,16 +91,16 @@ class App extends Component {
             rel="noopener noreferrer"
           >
         <img src={dbank} className="App-logo" alt="logo" height="32"/>
-          <b>d₿ank</b>
+          <b>dBank</b>
         </a>
         </nav>
         <div className="container-fluid mt-5 text-center">
         <br></br>
-          <h1>Welcome to d₿ank</h1>
+          <h1>Welcome to dbank</h1>
           <h2>{this.state.account}</h2>
           <br></br>
           <div className="row">
-            <main role="main" className="col-lg-12 d-flex text-center">
+          <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
               <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                 <Tab eventKey="deposit" title="Deposit">
@@ -143,10 +124,11 @@ class App extends Component {
                           id='depositAmount'
                           step="0.01"
                           type='number'
-                          ref={(input) => { this.depositAmount = input }}
                           className="form-control form-control-md"
                           placeholder='amount...'
                           required />
+                          ref={(input) => { this.depositAmount = input }}
+
                       </div>
                       <button type='submit' className='btn btn-primary'>DEPOSIT</button>
                     </form>
